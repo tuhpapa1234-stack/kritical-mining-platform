@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const API = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
-function LoginPage({ onLogin }) {
+function LoginPage({ onLogin, onBack }) {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -34,17 +34,22 @@ function LoginPage({ onLogin }) {
   };
 
   const handleGoogleLogin = async () => {
+    setMessage('🔐 Integrando con Google...');
     // TODO: Implement Google OAuth Flow
-    setMessage('Google Login Coming Soon!');
+    setTimeout(() => {
+      setMessage('Google Login Coming Soon!');
+    }, 2000);
   };
 
   return (
     <div className="login-container">
-      <h1>⛏️ KRITICAL</h1>
-      <p className="subtitle">Casa 13hs - Mining Platform</p>
+      <div className="login-header">
+        <h1>⛏️ KRITICAL</h1>
+        <p className="subtitle">Entra a tu Cuenta</p>
+      </div>
 
       {message && (
-        <div className={`message ${message.includes('Error') ? 'error' : 'success'}`}>
+        <div className={`message ${message.includes('Error') || message.includes('Coming') ? 'error' : 'success'}`}>
           {message}
         </div>
       )}
@@ -52,7 +57,7 @@ function LoginPage({ onLogin }) {
       <form onSubmit={handleSubmit}>
         {!isLogin && (
           <div className="form-group">
-            <label>Usuario</label>
+            <label>👤 Usuario</label>
             <input
               type="text"
               value={username}
@@ -63,7 +68,7 @@ function LoginPage({ onLogin }) {
         )}
 
         <div className="form-group">
-          <label>Email</label>
+          <label>📧 Email</label>
           <input
             type="email"
             value={email}
@@ -74,7 +79,7 @@ function LoginPage({ onLogin }) {
         </div>
 
         <div className="form-group">
-          <label>Contraseña</label>
+          <label>🔐 Contraseña</label>
           <input
             type="password"
             value={password}
@@ -85,7 +90,7 @@ function LoginPage({ onLogin }) {
         </div>
 
         <button type="submit" className="btn" disabled={loading}>
-          {loading ? 'Cargando...' : isLogin ? 'Iniciar Sesión' : 'Registrarse'}
+          {loading ? '⏳ Cargando...' : isLogin ? '🔓 Iniciar Sesión' : '✏️ Registrarse'}
         </button>
       </form>
 
@@ -94,11 +99,15 @@ function LoginPage({ onLogin }) {
       </button>
 
       <div className="toggle-text">
-        {isLogin ? 'Sin cuenta? ' : 'Ya tienes cuenta? '}
-        <button onClick={() => setIsLogin(!isLogin)}>
+        {isLogin ? '¿Sin cuenta? ' : '¿Ya tienes cuenta? '}
+        <button type="button" onClick={() => setIsLogin(!isLogin)}>
           {isLogin ? 'Regístrate' : 'Inicia Sesión'}
         </button>
       </div>
+
+      <button className="btn btn-back" onClick={onBack}>
+        ← Volver Atrás
+      </button>
     </div>
   );
 }
